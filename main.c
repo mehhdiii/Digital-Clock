@@ -8,6 +8,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+int d2BCD(int); //decimal to bcd converter function for 8 bits
 int extratime = 0; //counting upto a second
 int seconds = 0; 
 int minutes = 0; 
@@ -52,10 +53,15 @@ ISR(TIMER0_COMPA_vect){//interrupt which updates the state of digital clock
 			
 		}
 		
-		PORTB = seconds; //write the value of seconds to PORTB
-		PORTC = minutes; //write the value of minutes to PORTC
+		PORTB = d2BCD(seconds); //write the value of seconds to PORTB
+		PORTC = d2BCD(minutes); //write the value of minutes to PORTC
+		PORTD = d2BCD(hours); 
 		extratime= 0; 
 		
 	}
 }
 
+int d2BCD(int Decimal){
+	
+	return ( ( (Decimal/10) << 4) | (Decimal % 10) ); 
+}
